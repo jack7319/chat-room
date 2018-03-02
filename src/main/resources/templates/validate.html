@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>测试jquery validate校验</title>
+</head>
+<body>
+<form id="testForm" method="post">
+    姓名：<input type="text" id="name" name="name" required><br>
+    手机号：<input type="text" id="phone" name="phone" required><br>
+    年龄：<input type="text" id="age" name="age" required><br>
+    <button type="button" id="_add_btn">保存</button>
+</form>
+<div th:replace="~{layout/contextPath :: contextPath}"></div>
+</body>
+<script th:src="@{/js/jquery.js}"></script>
+<script th:src="@{/js/plug-form.js}"></script>
+<script th:src="@{/js/jsrender.js}"></script>
+<script th:src="@{/js/jquery.validate-1.13.1.js}"></script>
+<script th:src="@{/js/messages_zh.min.js}"></script>
+<script th:src="@{/js/userValidate.js}"></script>
+<script>
+    $(document).ready(function () {
+        userValidate.init();
+    })
+</script>
+</html>

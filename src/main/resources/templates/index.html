@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+</head>
+<body>
+<form  method="post">
+    <input type="text" id="name" name="name" placeholder="请输入群名称"><br/>
+    <button id="_btn_createGroup" type="button">创建群组</button>
+</form>
+群列表
+<div id="groupsDiv">
+</div>
+<div th:replace="~{layout/contextPath :: contextPath}"></div>
+</body>
+<script th:src="@{/js/jquery.js}"></script>
+<script th:src="@{/js/plug-form.js}"></script>
+<script th:src="@{/js/socket.js}"></script>
+<script th:inline="javascript">
+    var userId = [[${session.userInfo.id}]];
+    var username = [[${session.userInfo.name}]];
+    var groupId = null;
+    $.ajax({
+        url:contentpath+'/getAllGroups',
+        type:'get',
+        success:function (data) {
+            console.log(data);
+            var html = '';
+            $.each(data,function (i,d) {
+                html += '<a href=/enterGroup/'+d.id+'>'+d.name+'</a><br>';
+            });
+            $('#groupsDiv').html(html);
+        }
+    })
+    $('#_btn_createGroup').click(function () {
+        var name = $('#name').val();
+        if (!!!name || name.trim().length == 0) {
+            alert('请输入群名称');
+        }
+        $.ajax({
+            url: contentpath + '/createGroup',
+            type: 'post',
+            data: {'name': name},
+            success: function (data) {
+                if (data == '1') {
+                    location.reload();
+                }
+            }
+        })
+    })
+</script>
+</html>

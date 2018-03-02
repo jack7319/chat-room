@@ -1,0 +1,8 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="contextPath">
+<input type="text" th:value="${#httpServletRequest.contextPath}" id="contextPath" hidden="hidden"/>
+</div>
+</body>
+</html>

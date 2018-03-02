@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${group.name}">首页</title>
+</head>
+<body>
+所有的群成员
+<div id="membersDiv">
+<span th:each="u:${group.userInfoList}" th:id="${u.id}">[[${u.name}]]</span>
+</div>
+<br>
+<div id="msgDiv">
+
+</div>
+<input type="text" name="name" id="msg"><br/>
+<button type="button" id="_send">Send</button>
+<div th:replace="~{layout/contextPath :: contextPath}"></div>
+</body>
+<script th:src="@{/js/jquery.js}"></script>
+<script th:src="@{/js/plug-form.js}"></script>
+<script th:src="@{/js/jsrender.js}"></script>
+<script th:src="@{/js/socket.js}"></script>
+<script th:inline="javascript">
+    var userId = [[${session.userInfo.id}]];
+    var username = [[${session.userInfo.name}]];
+    var groupId = [[${group.id}]];
+    $('#_send').click(function () {
+        var msg = $('#msg').val();
+        if (!!!msg || msg.trim().length == 0) {
+            return false;
+        }
+        var obj = {};
+        obj.type = 2;
+        obj.userId = userId;
+        obj.groupId = groupId;
+        obj.msg = msg;
+        funcSocketSend(obj);
+        $('#msg').val('')
+    })
+    $(function () {
+        setTimeout(function () {
+            var obj = {};
+            obj.type = 1; // 加入群组
+            obj.userId = userId;
+            obj.groupId = groupId;
+            funcSocketSend(obj);
+        },500);
+
+        $(window).bind('beforeunload', function(){
+            var obj = {};
+            obj.type = 3; // 退出群组
+            obj.userId = userId;
+            obj.groupId = groupId;
+            funcSocketSend(obj);
+        });
+
+//        $.ajax({
+//            url:contentpath+'/getUserInfosByGroupId/'+groupId,
+//            type:'get',
+//            success:function (data) {
+//                var html = '';
+//                $.each(data,function (i,d) {
+//                    html += d.name+'<br/>';
+//                })
+//                $('#membersDiv').append(html);
+//            }
+//        })
+    })
+</script>
+</html>

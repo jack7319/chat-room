@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+</head>
+<body>
+<form th:action="@{/login}" method="post">
+    <input type="text" id="name" name="name" placeholder="请输入昵称"><br/>
+    <button type="button">登陆</button>
+</form>
+<div th:replace="~{layout/contextPath :: contextPath}"></div>
+</body>
+<script th:src="@{/js/jquery.js}"></script>
+<script th:src="@{/js/plug-form.js}"></script>
+<script th:src="@{/js/jsrender.js}"></script>
+<script>
+    $('button').click(function () {
+        var name = $('#name').val();
+        if (!!!name || name.trim().length == 0) {
+            alert('请输入昵称');
+        }
+        $.ajax({
+            url: contentpath + '/login',
+            type: 'post',
+            data: {'name': name},
+            success: function (data) {
+                if (data == '1') {
+                    location.href = contentpath + '/toPage/index';
+                }
+            }
+        })
+    })
+</script>
+</html>
